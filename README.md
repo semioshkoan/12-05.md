@@ -24,3 +24,26 @@ where date(p.payment_date) = '2005-07-30' and p.payment_date = r.rental_date and
 - оптимизируйте запрос: внесите корректировки по использованию операторов, при необходимости добавьте индексы.
 
 ### Решение 2
+
+- перечислите узкие места:
+
+Узкие места наблюдаются в момент использования оконных функций OVER и PARTITION BY, а  так же в  момент фильтрации вывода.
+
+- оптимизируйте запрос: внесите корректировки по использованию операторов, при необходимости добавьте индексы:
+
+Добавим индекс по столбцу payment_date таблицы payment
+```sql
+CREATE index payment_date on payment(payment_date);
+```
+и выполним оптимизированный запрос
+
+```sql
+select distinct concat(c.last_name, ' ', c.first_name), sum(p.amount) 
+from payment p
+join rental r on r.rental_id = p.rental_id 
+join customer c ON c.customer_id = p.customer_id 
+join inventory i on i.inventory_id = r.inventory_id 
+where date(p.payment_date) = '2005-07-30' 
+group by concat(c.last_name, ' ', c.first_name); 
+```
+![image]
