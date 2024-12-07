@@ -47,3 +47,16 @@ where date(p.payment_date) = '2005-07-30'
 group by concat(c.last_name, ' ', c.first_name); 
 ```
 ![image](https://github.com/semioshkoan/12-05.md/blob/main/%D0%92%D1%8B%D0%B4%D0%B5%D0%BB%D0%B5%D0%BD%D0%B8%D0%B5_097.png)
+
+### Доработка
+
+'''sql
+select distinct concat(c.last_name, ' ', c.first_name), sum(p.amount) 
+from payment p
+join rental r on r.rental_id = p.rental_id 
+join customer c ON c.customer_id = p.customer_id 
+join inventory i on i.inventory_id = r.inventory_id 
+where p.payment_date between '2005-07-30 00:00:00' and '2005-07-30 23:59:59'
+group by concat(c.last_name, ' ', c.first_name); 
+'''
+![image]
